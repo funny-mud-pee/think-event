@@ -1,0 +1,28 @@
+{
+  "name": "funny-mud-pee/think-event",
+  "type": "library",
+  "description": "think event",
+  "keywords": [
+    "think",
+    "event"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "funny mud pee",
+      "email": "2114164829@qq.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.4",
+    "topthink/framework": "^6.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "funnymudpee\\thinkphp\\": "src"
+    },
+    "files": [
+      "src/helper.php"
+    ]
+  }
+}
