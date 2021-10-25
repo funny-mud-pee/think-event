@@ -1,5 +1,7 @@
 <?php
 
+use think\facade\Event;
+
 /**
  * 触发事件
  * @param mixed $event 事件名（或者类名）
