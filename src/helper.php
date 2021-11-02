@@ -10,7 +10,7 @@ use think\facade\Event;
  */
 function event_trigger($event, $args = null): array
 {
-    return Event::triggerWithMergeResult($event, $args);
+    return Event::trigger($event, $args);
 }
 
 /**

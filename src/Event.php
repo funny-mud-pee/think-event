@@ -71,13 +71,12 @@ class Event extends \think\Event
     }
 
     /**
-     * 触发事件
-     * @access public
-     * @param string|object $event 事件名称
-     * @param mixed $params 传入参数
-     * @return mixed
+     * @param object|string $event
+     * @param mixed $params
+     * @param bool $once
+     * @return array|mixed
      */
-    public function triggerWithMergeResult($event, $params = null)
+    public function trigger($event, $params = null, bool $once = false)
     {
         if (is_object($event)) {
             $params = $event;
