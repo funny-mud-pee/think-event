@@ -4,13 +4,17 @@ use think\facade\Event;
 
 /**
  * 触发事件
- * @param mixed $event 事件名（或者类名）
+ * @param mixed $event 事件名(或者类名)
  * @param mixed $args 参数
+ * @param bool $once 仅触发事件中的第一个监听(todo)
+ * @param int $mode 默认0<br/>
+ * 0 : 将每次监听result与params合并并传递到下一个监听中,合并每次监听的result作为event返回值<br/>
+ * 1 : 将每次监听result作为params传递到下一个监听中,将最后一个监听的result作为event返回值<br/>
  * @return array
  */
-function event_trigger($event, $args = null): array
+function event_trigger($event, $args = null, bool $once = false, int $mode = 0): array
 {
-    return Event::trigger($event, $args);
+    return Event::trigger($event, $args, $once, $mode);
 }
 
 /**

@@ -72,11 +72,14 @@ class Event extends \think\Event
 
     /**
      * @param object|string $event
-     * @param mixed $params
+     * @param null $params
      * @param bool $once
-     * @return array|mixed
+     * @param int $mode 默认0<br/>
+     * 0 : 将每次监听result与params合并并传递到下一个监听中,合并每次监听的result作为event返回值<br/>
+     * 1 : 将每次监听result作为params传递到下一个监听中,将最后一个监听的result作为event返回值<br/>
+     * @return array
      */
-    public function trigger($event, $params = null, bool $once = false)
+    public function trigger($event, $params = null, bool $once = false, int $mode = 0)
     {
         if (is_object($event)) {
             $params = $event;
@@ -87,15 +90,29 @@ class Event extends \think\Event
         }
         $listeners = $this->listener[$event] ?? [];
         $listeners = array_unique($listeners, SORT_REGULAR);
+
         $return = [];
+        if (!is_array($params)) {
+            $params = [];
+        }
         foreach ($listeners as $key => $listener) {
             $result = $this->dispatch($listener, $params);
-            if (!is_array($result)) {
-                $result = [];
+
+            if (is_array($result) && !empty($result)) {
+                switch ($mode) {
+                    case 0:
+                    default:
+                        $params = array_merge($params, $result);
+                        $return = array_merge($return, $result);
+                        break;
+                    case 1:
+                        $params = $result;
+                        $return = $result;
+                        break;
+                }
             }
-            $params = array_merge($params, $result);
-            $return = array_merge_recursive($return, $result);
         }
+
         return $return;
     }
 
