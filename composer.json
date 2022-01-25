@@ -3,13 +3,13 @@
   "type": "library",
   "description": "think event",
   "keywords": [
-    "think",
+    "thinkphp",
     "event"
   ],
   "license": "MIT",
   "authors": [
     {
-      "name": "funny mud pee",
+      "name": "funnymudpee",
       "email": "2114164829@qq.com"
     }
   ],
