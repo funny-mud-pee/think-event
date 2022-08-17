@@ -7,6 +7,50 @@ use Closure;
 class Event extends \think\Event
 {
 
+    public function listeners()
+    {
+        return $this->listener;
+    }
+
+    /**
+     * 移除事件监听
+     * @access public
+     * @param string $event 事件名称
+     * @param $listener
+     * @return void
+     */
+    public function cancel(string $event, $listener): void
+    {
+        if (isset($this->bind[$event])) {
+            $event = $this->bind[$event];
+        }
+        if (is_null($listener)) {
+            $this->listener[$event] = [];
+        } else {
+            $key = $this->key($listener);
+            if (!is_null($key)) {
+                unset($this->listener[$event][$key]);
+            }
+        }
+    }
+
+    private function key($listener)
+    {
+        if ($listener instanceof Closure) {
+            return null;
+        }
+        if (is_callable($listener) && is_array($listener)) {
+            $class = $listener[0];
+            if (is_object($class)) {
+                $class = get_class($class);
+            }
+            $tag = $class . '::' . $listener[1];
+        } else {
+            $tag = $listener;
+        }
+        return md5($tag);
+    }
+
     /**
      * 注册事件监听
      * @access public
@@ -34,22 +78,6 @@ class Event extends \think\Event
         return $this;
     }
 
-    private function key($listener)
-    {
-        if ($listener instanceof Closure) {
-            return null;
-        }
-        if (is_callable($listener) && is_array($listener)) {
-            $class = $listener[0];
-            if (is_object($class)) {
-                $class = get_class($class);
-            }
-            $tag = $class . '::' . $listener[1];
-        } else {
-            $tag = $listener;
-        }
-        return md5($tag);
-    }
 
     /**
      * 批量注册事件监听
@@ -111,36 +139,13 @@ class Event extends \think\Event
                         break;
                 }
             }
+            if ($once) {
+                break;
+            }
         }
 
         return $return;
     }
 
-    public function listeners()
-    {
-        return $this->listener;
-    }
 
-
-    /**
-     * 移除事件监听
-     * @access public
-     * @param string $event 事件名称
-     * @param $listener
-     * @return void
-     */
-    public function cancel(string $event, $listener): void
-    {
-        if (isset($this->bind[$event])) {
-            $event = $this->bind[$event];
-        }
-        if (is_null($listener)) {
-            $this->listener[$event] = [];
-        } else {
-            $key = $this->key($listener);
-            if (!is_null($key)) {
-                unset($this->listener[$event][$key]);
-            }
-        }
-    }
 }
