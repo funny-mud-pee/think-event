@@ -101,7 +101,7 @@ class Event extends \think\Event
     /**
      * @param object|string $event
      * @param null $params
-     * @param bool $once
+     * @param bool $once 仅仅返回事件中第一个有效监听的结果
      * @param int $mode 默认0<br/>
      * 0 : 将每次监听result与params合并并传递到下一个监听中,合并每次监听的result作为event返回值<br/>
      * 1 : 将每次监听result作为params传递到下一个监听中,将最后一个监听的result作为event返回值<br/>
@@ -138,9 +138,10 @@ class Event extends \think\Event
                         $return = $result;
                         break;
                 }
-            }
-            if ($once) {
-                break;
+
+                if ($once) {
+                    break;
+                }
             }
         }
 
